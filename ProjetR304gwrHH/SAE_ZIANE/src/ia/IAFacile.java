@@ -20,7 +20,7 @@ public class IAFacile implements IA {
             }
         }
 
-        throw new IllegalStateException("Aucun coup légal disponible pour l'IA.");
+        throw new IllegalStateException("Aucun coup legal disponible pour l'IA.");
     }
 
     private String convertirPosition(int ligne, int colonne) {
