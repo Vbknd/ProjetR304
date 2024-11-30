@@ -63,7 +63,7 @@ public class Interpreteur {
         System.out.println("Mode Joueur contre IA sélectionné.");
         System.out.println("Choisissez votre couleur (tapez 'noir' ou 'blanc') :");
         System.out.print("> ");
-        String choixCouleur = scanner.nextLine().trim(); // Nettoyage
+        String choixCouleur = scanner.nextLine().trim();
 
         char symboleJoueur, symboleIA;
         boolean joueurCommence;
@@ -88,7 +88,7 @@ public class Interpreteur {
         System.out.println("2. Moyen");
         System.out.println("3. Difficile");
         System.out.print("> ");
-        String niveau = scanner.nextLine().trim(); // Nettoyage
+        String niveau = scanner.nextLine().trim();
 
         IA ia;
         switch (niveau) {
@@ -112,32 +112,43 @@ public class Interpreteur {
             if (joueurCommence) {
                 // Tour du joueur
                 System.out.print("Votre tour : ");
-                String ligne = scanner.nextLine().trim(); // Nettoyage
-                partieTerminee = traiterCommande(ligne, symboleJoueur);
+                String commande = scanner.nextLine().trim();
+
+                if (!commande.startsWith("play")) {
+                    partieTerminee = traiterCommande(commande, symboleJoueur);
+                    continue; // Passe au prochain tour sans appeler l'IA
+                }
+                partieTerminee = traiterCommande(commande, symboleJoueur);
 
                 // Si la partie n'est pas terminée, l'IA joue
                 if (!partieTerminee) {
                     System.out.println("IA réfléchit...");
-                    String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur).trim(); // Nettoyage IA
+                    String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur).trim();
                     System.out.println("IA joue : " + coupIA);
                     partieTerminee = traiterCommande("play " + (symboleIA == 'X' ? "noir" : "blanc") + " " + coupIA, symboleIA);
                 }
             } else {
                 // Tour de l'IA
                 System.out.println("IA réfléchit...");
-                String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur).trim(); // Nettoyage IA
+                String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur).trim();
                 System.out.println("IA joue : " + coupIA);
                 partieTerminee = traiterCommande("play " + (symboleIA == 'X' ? "noir" : "blanc") + " " + coupIA, symboleIA);
 
                 // Si la partie n'est pas terminée, le joueur joue
                 if (!partieTerminee) {
                     System.out.print("Votre tour : ");
-                    String ligne = scanner.nextLine().trim(); // Nettoyage
-                    partieTerminee = traiterCommande(ligne, symboleJoueur);
+                    String commande = scanner.nextLine().trim();
+
+                    if (!commande.startsWith("play")) {
+                        partieTerminee = traiterCommande(commande, symboleJoueur);
+                        continue; // Passe au prochain tour sans appeler l'IA
+                    }
+                    partieTerminee = traiterCommande(commande, symboleJoueur);
                 }
             }
         }
     }
+
 
 
 
@@ -204,7 +215,7 @@ public class Interpreteur {
 
         int[] coords = parsePosition(position);
         if (!plateau.estCoupLegal(coords[0], coords[1])) {
-            System.out.println("La case " + position + " est déjà occupée.");
+            System.out.println("La case " + position + " est désormais occupée.");
             return false;
         }
 
@@ -230,10 +241,13 @@ public class Interpreteur {
         char symboleAdversaire = couleur.equals("noir") ? 'O' : 'X';
 
         IA ia = new IAFacile();
-        String coupIA = ia.jouer(plateau, symboleIA, symboleAdversaire);
-        System.out.println("=" + coupIA);
+        Commande genMove = new GenMoveCommande(plateau, ia, symboleIA, symboleAdversaire);
+
+        String resultat = gestionnaire.executerCommande(genMove);
+        System.out.println(resultat);
         return false;
     }
+
 
     private boolean traiterQuit() {
         System.out.println("=8");
