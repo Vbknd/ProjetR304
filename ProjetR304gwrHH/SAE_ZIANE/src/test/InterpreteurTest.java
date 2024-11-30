@@ -1,7 +1,7 @@
 package test;
 
-import terminalinteractions.Interpreteur;
 import org.junit.jupiter.api.Test;
+import terminalinteractions.Interpreteur;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

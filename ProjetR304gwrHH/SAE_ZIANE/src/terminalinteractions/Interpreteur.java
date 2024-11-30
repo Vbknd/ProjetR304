@@ -63,7 +63,7 @@ public class Interpreteur {
         System.out.println("Mode Joueur contre IA sélectionné.");
         System.out.println("Choisissez votre couleur (tapez 'noir' ou 'blanc') :");
         System.out.print("> ");
-        String choixCouleur = scanner.nextLine().toLowerCase();
+        String choixCouleur = scanner.nextLine().trim(); // Nettoyage
 
         char symboleJoueur, symboleIA;
         boolean joueurCommence;
@@ -88,7 +88,7 @@ public class Interpreteur {
         System.out.println("2. Moyen");
         System.out.println("3. Difficile");
         System.out.print("> ");
-        String niveau = scanner.nextLine();
+        String niveau = scanner.nextLine().trim(); // Nettoyage
 
         IA ia;
         switch (niveau) {
@@ -112,116 +112,57 @@ public class Interpreteur {
             if (joueurCommence) {
                 // Tour du joueur
                 System.out.print("Votre tour : ");
-                String ligne = scanner.nextLine();
+                String ligne = scanner.nextLine().trim(); // Nettoyage
                 partieTerminee = traiterCommande(ligne, symboleJoueur);
 
                 // Si la partie n'est pas terminée, l'IA joue
                 if (!partieTerminee) {
                     System.out.println("IA réfléchit...");
-                    String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur);
+                    String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur).trim(); // Nettoyage IA
                     System.out.println("IA joue : " + coupIA);
-                    partieTerminee = traiterCommande("jouer " + (symboleIA == 'X' ? "noir" : "blanc") + " " + coupIA, symboleIA);
+                    partieTerminee = traiterCommande("play " + (symboleIA == 'X' ? "noir" : "blanc") + " " + coupIA, symboleIA);
                 }
             } else {
                 // Tour de l'IA
                 System.out.println("IA réfléchit...");
-                String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur);
+                String coupIA = ia.jouer(plateau, symboleIA, symboleJoueur).trim(); // Nettoyage IA
                 System.out.println("IA joue : " + coupIA);
-                partieTerminee = traiterCommande("jouer " + (symboleIA == 'X' ? "noir" : "blanc") + " " + coupIA, symboleIA);
+                partieTerminee = traiterCommande("play " + (symboleIA == 'X' ? "noir" : "blanc") + " " + coupIA, symboleIA);
 
                 // Si la partie n'est pas terminée, le joueur joue
                 if (!partieTerminee) {
                     System.out.print("Votre tour : ");
-                    String ligne = scanner.nextLine();
+                    String ligne = scanner.nextLine().trim(); // Nettoyage
                     partieTerminee = traiterCommande(ligne, symboleJoueur);
                 }
             }
         }
     }
 
+
+
     private boolean traiterCommande(String commande, char symbole) {
+        commande = commande.trim(); // Nettoie la commande avant de la traiter
+        System.out.println("Commande reçue : [" + commande + "]");
+
         try {
+            if (commande.isEmpty()) {
+                System.out.println("? Commande vide ignorée");
+                return false;
+            }
+
             if (commande.startsWith("boardsize")) {
-                int taille = Integer.parseInt(commande.split(" ")[1]);
-                Commande definirTaille = new DefinirTaillePlateauCommande(plateau, taille);
-                System.out.println(gestionnaire.executerCommande(definirTaille));
-                return false;
-
+                return traiterBoardSize(commande);
             } else if (commande.equals("clear_board")) {
-                Commande reinitialiser = new ReinitialiserPlateauCommande(plateau);
-                System.out.println(gestionnaire.executerCommande(reinitialiser));
-
-                return false;
-
+                return traiterClearBoard();
             } else if (commande.startsWith("play")) {
-                String[] parties = commande.split(" ");
-                if (parties.length == 3) {
-                    String couleur = parties[1];
-                    String position = parties[2];
-
-                    if ((symbole == 'X' && !couleur.equals("noir")) || (symbole == 'O' && !couleur.equals("blanc"))) {
-                        System.out.println("Vous ne pouvez jouer qu'avec vos propres pions (" + (symbole == 'X' ? "Noir" : "Blanc") + ").");
-                        return false;
-                    }
-
-                    int[] coords = parsePosition(position);
-                    int ligne = coords[0];
-                    int colonne = coords[1];
-
-                    if (!plateau.estCoupLegal(ligne, colonne)) {
-                        System.out.println("La case " + position + " est déjà occupée.");
-                        return false;
-                    }
-
-                    Commande jouer = new JouerCommande(plateau, couleur, position);
-                    String resultat = gestionnaire.executerCommande(jouer);
-                    System.out.println(resultat);
-
-
-                    if (resultat.contains("a gagné")) {
-                        System.out.println("\nQue voulez-vous faire ?");
-                        System.out.println("1. Rejouer");
-                        System.out.println("2. Quitter");
-                        System.out.print("> ");
-                        Scanner scanner = new Scanner(System.in);
-                        String choix = scanner.nextLine();
-
-                        if (choix.equals("1")) {
-                            plateau.reinitialiser();
-                            System.out.println("Nouvelle partie !");
-                            System.out.println(plateau);
-                            return false;
-                        } else {
-                            System.out.println("Merci d'avoir joué !");
-                            return true;
-                        }
-                    }
-
-                    return false;
-
-                } else {
-                    System.out.println("? Commande invalide pour jouer. Utilisez : jouer [couleur] [position]");
-                    return false;
-                }
-
+                return traiterPlay(commande, symbole);
             } else if (commande.equals("showboard")) {
-                System.out.println("= \n" + plateau);
-                return false;
-
+                return traiterShowBoard();
             } else if (commande.startsWith("genmove ")) {
-                String couleur = commande.split(" ")[1];
-                char symboleIA = couleur.equals("noir") ? 'X' : 'O';
-                char symboleAdversaire = couleur.equals("noir") ? 'O' : 'X';
-                IA ia = new IAFacile();
-                String coupIA = ia.jouer(plateau, symboleIA, symboleAdversaire);
-                System.out.println("=" + coupIA);
-                return false;
-
+                return traiterGenMove(commande);
             } else if (commande.equals("quit")) {
-                System.out.println("=8");
-                System.out.println("Merci d'avoir joué !");
-                return true;
-
+                return traiterQuit();
             } else {
                 System.out.println("? Commande inconnue");
                 return false;
@@ -231,6 +172,99 @@ public class Interpreteur {
             return false;
         }
     }
+
+
+    private boolean traiterBoardSize(String commande) {
+        int taille = Integer.parseInt(commande.split(" ")[1]);
+        Commande definirTaille = new DefinirTaillePlateauCommande(plateau, taille);
+        System.out.println(gestionnaire.executerCommande(definirTaille));
+        return false;
+    }
+
+    private boolean traiterClearBoard() {
+        Commande reinitialiser = new ReinitialiserPlateauCommande(plateau);
+        System.out.println(gestionnaire.executerCommande(reinitialiser));
+        return false;
+    }
+
+    private boolean traiterPlay(String commande, char symbole) {
+        String[] parties = commande.split(" ");
+        if (parties.length != 3) {
+            System.out.println("? Commande invalide pour jouer. Utilisez : jouer [couleur] [position]");
+            return false;
+        }
+
+        String couleur = parties[1];
+        String position = parties[2];
+
+        if (!couleurValide(couleur, symbole)) {
+            System.out.println("Vous ne pouvez jouer qu'avec vos propres pions (" + (symbole == 'X' ? "Noir" : "Blanc") + ").");
+            return false;
+        }
+
+        int[] coords = parsePosition(position);
+        if (!plateau.estCoupLegal(coords[0], coords[1])) {
+            System.out.println("La case " + position + " est déjà occupée.");
+            return false;
+        }
+
+        Commande jouer = new JouerCommande(plateau, couleur, position);
+        String resultat = gestionnaire.executerCommande(jouer);
+        System.out.println(resultat);
+
+        if (resultat.contains("a gagné")) {
+            return gererFinPartie();
+        }
+
+        return false;
+    }
+
+    private boolean traiterShowBoard() {
+        System.out.println("= \n" + plateau);
+        return false;
+    }
+
+    private boolean traiterGenMove(String commande) {
+        String couleur = commande.split(" ")[1];
+        char symboleIA = couleur.equals("noir") ? 'X' : 'O';
+        char symboleAdversaire = couleur.equals("noir") ? 'O' : 'X';
+
+        IA ia = new IAFacile();
+        String coupIA = ia.jouer(plateau, symboleIA, symboleAdversaire);
+        System.out.println("=" + coupIA);
+        return false;
+    }
+
+    private boolean traiterQuit() {
+        System.out.println("=8");
+        System.out.println("Merci d'avoir joué !");
+        return true;
+    }
+
+    private boolean couleurValide(String couleur, char symbole) {
+        return (symbole == 'X' && couleur.equals("noir")) || (symbole == 'O' && couleur.equals("blanc"));
+    }
+
+    private boolean gererFinPartie() {
+        System.out.println("\nQue voulez-vous faire ?");
+        System.out.println("1. Rejouer");
+        System.out.println("2. Quitter");
+        System.out.print("> ");
+
+        Scanner scanner = new Scanner(System.in);
+        String choix = scanner.nextLine();
+
+        if (choix.equals("1")) {
+            plateau.reinitialiser();
+            System.out.println("Nouvelle partie !");
+            System.out.println(plateau);
+            return false;
+        } else {
+            System.out.println("Merci d'avoir joué !");
+            return true;
+        }
+    }
+
 
     private int[] parsePosition(String position) {
         try {
