@@ -4,3 +4,4 @@ Membres du groupe :
 - Imad-Eddine BAHIJ (204)
 - Ayoub BUHALLUT (204)
 - Lucas REVAULT (204)
+- Victor OSKANIAN (204)
