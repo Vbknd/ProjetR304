@@ -18,7 +18,7 @@ public class JouerCommande implements Commande {
     public String executer() {
         try {
             int[] coords = parsePosition(position);
-            char pierre = couleur.equals("noir") ? 'X' : 'O';
+            char pierre = couleur.equals("black") ? 'X' : 'O';
             plateau.placerPierre(coords[0], coords[1], pierre);
 
             // Vérification de la victoire
@@ -27,7 +27,7 @@ public class JouerCommande implements Commande {
                 return "=" + couleur + " a gagné !";
             }
 
-            return "=3"; // Coup réussi
+            return position; // Coup réussi
         } catch (IllegalArgumentException e) {
             return "? " + e.getMessage();
         }

@@ -37,12 +37,11 @@ public class Plateau {
 
     public void placerPierre(int ligne, int colonne, char symbole) {
         if (!estCoupLegal(ligne, colonne)) {
-            System.err.println("Tentative de placement illégal : (" + ligne + ", " + colonne + ")");
             throw new IllegalArgumentException("Coup illégal : la case (" + ligne + ", " + colonne + ") est déjà occupée ou hors limite.");
         }
 
         grille[ligne][colonne] = symbole;
-        System.out.println("Pierre placée sur (" + ligne + ", " + colonne + ") avec le symbole '" + symbole + "'.");
+
     }
 
 
@@ -71,7 +70,7 @@ public class Plateau {
             sb.append(i + 1).append(" ");
             if (i + 1 < 10) sb.append(" ");
             for (int j = 0; j < taille; j++) {
-                sb.append(grille[i][j]).append(" ");
+                sb.append(grille[i][j]).append(" "); // Affiche chaque symbole tel qu'il est dans la grille
             }
             sb.append(i + 1).append("\n");
         }
@@ -84,4 +83,5 @@ public class Plateau {
 
         return sb.toString();
     }
+
 }

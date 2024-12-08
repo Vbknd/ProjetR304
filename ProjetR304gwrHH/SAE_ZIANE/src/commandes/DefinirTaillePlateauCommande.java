@@ -15,7 +15,7 @@ public class DefinirTaillePlateauCommande implements Commande {
     public String executer() {
         try {
             plateau.definirTaille(taille);
-            return "=1";
+            return "";
         } catch (IllegalArgumentException e) {
             return "? " + e.getMessage();
         }

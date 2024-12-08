@@ -19,8 +19,16 @@ public class GenMoveCommande implements Commande {
     @Override
     public String executer() {
         try {
+
+            if (!(symboleIA == 'X' || symboleIA == 'O')) {
+                return "? invalid color"; }
+
             String coup = ia.jouer(plateau, symboleIA, symboleAdversaire);
-            return "=" + coup;
+
+            if (coup == null || coup.isEmpty()) {
+                return "? no valid moves";
+            }
+            return " "+coup;
         } catch (Exception e) {
             return "? " + e.getMessage();
         }
