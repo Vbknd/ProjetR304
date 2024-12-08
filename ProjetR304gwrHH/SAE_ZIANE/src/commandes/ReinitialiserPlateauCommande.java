@@ -12,6 +12,6 @@ public class ReinitialiserPlateauCommande implements Commande {
     @Override
     public String executer() {
         plateau.reinitialiser();
-        return "=2";
+        return "";
     }
 }

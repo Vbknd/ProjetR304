@@ -1,149 +1,140 @@
 package test;
 
-import org.junit.jupiter.api.Test;
-import terminalinteractions.Interpreteur;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InterpreteurTest {
+import commandes.*;
+import ia.*;
+import joueur.BotMinimax;
+import joueur.BotNaif;
+import joueur.Joueur;
+import joueur.JoueurHumain;
+import plateau.Plateau;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-    @Test
-    public void testCommandeQuit() {
-        String simulationEntree = "quit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
+class InterpreteurTest {
 
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
+    private Plateau plateau;
+    private GestionnaireCommandes gestionnaire;
 
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
+    @BeforeEach
+    void setUp() {
+        plateau = new Plateau(7);
+        gestionnaire = new GestionnaireCommandes();
 
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("=8"));
-        assertTrue(sortie.contains("Merci d'avoir joué !"));
     }
 
     @Test
-    public void testDefinirTailleCommande() {
-        String simulationEntree = "definir-taille 9\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
-
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
-
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("=1")); // Commande réussie
+    void testBoardSize() {
+        Commande definirTaille = new DefinirTaillePlateauCommande(plateau, 9);
+        String resultat = gestionnaire.executerCommande(definirTaille);
+        assertEquals("", resultat);
+        assertEquals(9, plateau.getTaille());
     }
 
     @Test
-    public void testReinitialiserPlateauCommande() {
-        String simulationEntree = "reinitialiser-plateau\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
+    void testClearBoard() {
+        // Place une pierre pour vérifier la réinitialisation
+        plateau.placerPierre(3, 3, 'X');
+        assertEquals('X', plateau.getGrille()[3][3]);
 
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
-
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("=2")); // Commande réussie
+        Commande reinitialiser = new ReinitialiserPlateauCommande(plateau);
+        String resultat = gestionnaire.executerCommande(reinitialiser);
+        assertEquals("", resultat);
+        assertEquals('.', plateau.getGrille()[3][3]);
     }
 
     @Test
-    public void testJouerCommande() {
-        String simulationEntree = "jouer noir D4\njouer blanc D5\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
-
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
-
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("=3")); // Chaque commande jouer est réussie
+    void testPlay() {
+        Commande jouer = new JouerCommande(plateau, "black", "D4");
+        String resultat = gestionnaire.executerCommande(jouer);
+        assertEquals("D4", resultat.trim());
+        assertEquals('X', plateau.getGrille()[3][3]); // Ligne 3, Colonne 3 (D4)
     }
 
     @Test
-    public void testShowBoardCommande() {
-        String simulationEntree = "showboard\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
+    void testPlayIllegalMove() {
+        // Place une pierre pour rendre le coup illégal
+        plateau.placerPierre(3, 3, 'X');
 
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
-
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("=")); // Affichage réussi
-        assertTrue(sortie.contains("A B C D E F G")); // Vérifie le plateau
+        Commande jouer = new JouerCommande(plateau, "black", "D4");
+        String resultat = gestionnaire.executerCommande(jouer);
+        assertTrue(resultat.startsWith("?"));
     }
 
     @Test
-    public void testGenMoveCommande() {
-        String simulationEntree = "genmove noir\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
-
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
-
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("=")); // Coup de l'IA réussi
+    void testShowBoard() {
+        plateau.placerPierre(0, 0, 'X'); // Place une pierre pour vérifier l'affichage
+        String boardRepresentation = plateau.toString();
+        assertTrue(boardRepresentation.contains("X")); // Vérifie que la pierre est affichée
     }
+    @Test
+    void testMinimaxBot() {
+        Plateau plateau = new Plateau(6); // Petit plateau 3x3
+        BotMinimax bot = new BotMinimax(2); // Profondeur de 2
 
+        // Place des pions pour simuler une situation
+        plateau.placerPierre(0, 0, 'X'); // IA
+        plateau.placerPierre(1, 1, 'O'); // Adversaire
+
+        String coup = bot.jouer(plateau, 'X', 'O');
+        assertNotNull(coup, "Le BotMinimax doit trouver un coup.");
+        System.out.println("Coup choisi par BotMinimax : " + coup);
+    }
 
     @Test
-    public void testModeJoueurVsJoueur() {
-        String simulationEntree = "1\nD4\nD5\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
+    void testSetPlayerHuman() {
+        // Plateau fictif pour le contexte
+        Plateau plateau = new Plateau(7);
 
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
+        // Simuler un joueur humain
+        Joueur joueurBlanc = new JoueurHumain();
+        Joueur joueurNoir = new JoueurHumain();
 
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("Joueur 1 (Noir) :"));
-        assertTrue(sortie.contains("Joueur 2 (Blanc) :"));
+        assertTrue(joueurBlanc instanceof JoueurHumain, "White player should be JoueurHumain");
+        assertTrue(joueurNoir instanceof JoueurHumain, "Black player should be JoueurHumain");
     }
-
 
     @Test
-    public void testModeJoueurVsIA() {
-        String simulationEntree = "2\nnoir\n1\nD4\nquit\n";
-        ByteArrayInputStream entreeSimulee = new ByteArrayInputStream(simulationEntree.getBytes());
-        ByteArrayOutputStream sortieCapturee = new ByteArrayOutputStream();
+    void testSetPlayerBotNaif() {
+        // Simuler un bot naïf
+        Joueur joueurBlanc = new BotNaif();
+        Joueur joueurNoir = new BotNaif();
 
-        System.setIn(entreeSimulee);
-        System.setOut(new PrintStream(sortieCapturee));
-
-        Interpreteur interpreteur = new Interpreteur();
-        interpreteur.lancer();
-
-        String sortie = sortieCapturee.toString();
-        assertTrue(sortie.contains("Votre tour :"));
-        assertTrue(sortie.contains("IA réfléchit..."));
+        assertTrue(joueurBlanc instanceof BotNaif, "White player should be BotNaif");
+        assertTrue(joueurNoir instanceof BotNaif, "Black player should be BotNaif");
     }
+
+    @Test
+    void testSetPlayerBotMinimax() {
+        // Simuler un bot Minimax avec profondeur
+        int profondeurBlanc = 3;
+        int profondeurNoir = 5;
+
+        BotMinimax joueurBlanc = new BotMinimax(profondeurBlanc);
+        BotMinimax joueurNoir = new BotMinimax(profondeurNoir);
+
+        assertTrue(joueurBlanc instanceof BotMinimax, "White player should be BotMinimax");
+        assertTrue(joueurNoir instanceof BotMinimax, "Black player should be BotMinimax");
+        assertEquals(profondeurBlanc, joueurBlanc.getProfondeurMax(), "Minimax bot depth should be 3");
+        assertEquals(profondeurNoir, joueurNoir.getProfondeurMax(), "Minimax bot depth should be 5");
+    }
+
+    @Test
+    void testInvalidPlayerConfiguration() {
+        // Cas de profondeur négative ou nulle pour BotMinimax
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new BotMinimax(0); // Problème de profondeur égale à 0
+        });
+        assertEquals("La profondeur maximale doit être supérieure à 0.", exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            new BotMinimax(-1); // Problème de profondeur négative
+        });
+        assertEquals("La profondeur maximale doit être supérieure à 0.", exception.getMessage());
+    }
+
+
 
 
 }
