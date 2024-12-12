@@ -20,8 +20,6 @@ public class Interpreteur {
     public Interpreteur() {
         this.plateau = new Plateau(7);
         this.gestionnaire = new GestionnaireCommandes();
-        this.joueurBlanc=new JoueurHumain();
-        this.joueurNoir=new JoueurHumain();
     }
 
     public void lancer() {
@@ -41,10 +39,12 @@ public class Interpreteur {
 
     private boolean traiterCommande(String commande) {
 
+        if (joueurBlanc == null || joueurNoir == null) {
             if (!commande.startsWith("set_player")) {
                 System.out.println("?" + numCommande + " Vous devez d'abord configurer les joueurs avec 'set_player'.");
                 return false;
             }
+        }
 
 
         commande = commande.trim();

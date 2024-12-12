@@ -24,11 +24,7 @@ public class GenMoveCommande implements Commande {
             if (!(symboleIA == 'X' || symboleIA == 'O')) {
                 return "? invalid color"; }
 
-<<<<<<< HEAD
             String coup = joueur.jouer(plateau, symboleIA, symboleAdversaire);
-=======
-            String coup = ia.jouer(plateau, symboleIA, symboleAdversaire);
->>>>>>> origin/main
 
             if (coup == null || coup.isEmpty()) {
                 return "? no valid moves";
