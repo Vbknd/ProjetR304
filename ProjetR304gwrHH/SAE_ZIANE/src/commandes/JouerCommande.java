@@ -24,7 +24,7 @@ public class JouerCommande implements Commande {
             // Vérification de la victoire
             VerifierVictoire verifier = new VerifierVictoire(plateau);
             if (verifier.aGagne(coords[0], coords[1], pierre)) {
-                return "=" + couleur + " a gagné !";
+                return "=" + couleur + "wins!";
             }
 
             return position; // Coup réussi

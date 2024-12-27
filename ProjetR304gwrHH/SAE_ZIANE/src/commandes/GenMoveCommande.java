@@ -1,8 +1,9 @@
 package commandes;
 
-import ia.IA;
+
 import joueur.Joueur;
 import plateau.Plateau;
+import verification.VerifierVictoire;
 
 public class GenMoveCommande implements Commande {
     private final Plateau plateau;

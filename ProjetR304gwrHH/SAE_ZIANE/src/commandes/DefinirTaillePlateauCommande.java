@@ -7,9 +7,6 @@ public class DefinirTaillePlateauCommande implements Commande {
     private int taille;
 
     public DefinirTaillePlateauCommande(Plateau plateau, int taille) {
-        if (taille <= 5 || taille > 19) {
-            throw new IllegalArgumentException("La taille du plateau doit être comprise entre 1 et 19.");
-        }
         this.plateau = plateau;
         this.taille = taille;
     }

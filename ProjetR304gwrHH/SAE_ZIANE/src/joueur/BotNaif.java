@@ -3,6 +3,8 @@ package joueur;
 
 
 import plateau.Plateau;
+import verification.VerifierVictoire;
+
 import java.util.Random;
 
 public class BotNaif implements Joueur {
@@ -16,8 +18,17 @@ public class BotNaif implements Joueur {
             int colonne = random.nextInt(taille);
             if (plateau.estCoupLegal(ligne, colonne)) {
                 char colonneChar = (char) ('A' + colonne);
+
+
+                VerifierVictoire verifierVictoire = new VerifierVictoire(plateau);
+                if (verifierVictoire.aGagne(ligne, colonne, symboleIA)) {
+                    return symboleIA + " wins!";
+                }
+
                 return colonneChar + "" + (ligne + 1);
+
             }
+
         }
 
         throw new IllegalStateException("Aucun coup légal disponible.");

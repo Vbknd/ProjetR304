@@ -9,8 +9,8 @@ public class Plateau {
     }
 
     public void definirTaille(int taille) {
-        if (taille < 5 || taille > 19) {
-            throw new IllegalArgumentException("La taille doit être entre 5 et 19");
+        if (taille < 3 || taille > 19) {
+            throw new IllegalArgumentException("La taille doit être entre 3 et 19");
         }
         this.taille = taille;
         grille = new char[taille][taille];

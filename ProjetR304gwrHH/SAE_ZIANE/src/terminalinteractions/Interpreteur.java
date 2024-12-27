@@ -6,7 +6,8 @@ import joueur.Joueur;
 import joueur.JoueurHumain;
 import plateau.Plateau;
 import commandes.*;
-import ia.*;
+import verification.VerifierVictoire;
+
 import java.util.Scanner;
 
 public class Interpreteur {
@@ -151,8 +152,13 @@ public class Interpreteur {
                 return false;
             }
 
-            // Applique le coup au plateau
             plateau.placerPierre(coordonnees[0], coordonnees[1], symboleIA);
+
+            VerifierVictoire verifierVictoire = new VerifierVictoire(plateau);
+            if (verifierVictoire.aGagne(coordonnees[0], coordonnees[1], symboleIA)) {
+                System.out.println("=" + numCommande + " " + symboleIA + " wins!");
+                return true; // Fin de partie
+            }
 
             System.out.println("=" + numCommande + " " + coup);
             return false;
@@ -230,8 +236,12 @@ public class Interpreteur {
             return new int[]{ligne, colonne - 'A'};
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Format de position invalide (ex: A1)");
+        } catch (Exception e) {
+            System.out.println("Erreur dans parsePosition : " + e.getMessage());
+            throw e; // Réémettre l'exception
         }
     }
+
 
 
 

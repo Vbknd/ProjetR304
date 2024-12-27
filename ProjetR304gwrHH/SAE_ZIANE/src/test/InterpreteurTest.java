@@ -3,7 +3,7 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import commandes.*;
-import ia.*;
+
 import joueur.BotMinimax;
 import joueur.BotNaif;
 import joueur.Joueur;
