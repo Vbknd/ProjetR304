@@ -26,7 +26,7 @@ public class Plateau {
     }
 
     public boolean estCoupLegal(int ligne, int colonne) {
-        // Vérifie si les coordonnées sont dans les limites du plateau
+
         if (ligne < 0 || ligne >= taille || colonne < 0 || colonne >= taille) {
             return false;
         }
@@ -58,24 +58,24 @@ public class Plateau {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        // Ligne des colonnes
+
         sb.append("   ");
         for (int i = 0; i < taille; i++) {
             sb.append((char) ('A' + i)).append(" ");
         }
         sb.append("\n");
 
-        // Lignes du plateau
+
         for (int i = taille - 1; i >= 0; i--) {
             sb.append(i + 1).append(" ");
             if (i + 1 < 10) sb.append(" ");
             for (int j = 0; j < taille; j++) {
-                sb.append(grille[i][j]).append(" "); // Affiche chaque symbole tel qu'il est dans la grille
+                sb.append(grille[i][j]).append(" ");
             }
             sb.append(i + 1).append("\n");
         }
 
-        // Ligne des colonnes en bas
+
         sb.append("   ");
         for (int i = 0; i < taille; i++) {
             sb.append((char) ('A' + i)).append(" ");

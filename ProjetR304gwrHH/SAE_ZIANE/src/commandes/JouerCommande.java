@@ -21,13 +21,13 @@ public class JouerCommande implements Commande {
             char pierre = couleur.equals("black") ? 'X' : 'O';
             plateau.placerPierre(coords[0], coords[1], pierre);
 
-            // Vérification de la victoire
+
             VerifierVictoire verifier = new VerifierVictoire(plateau);
             if (verifier.aGagne(coords[0], coords[1], pierre)) {
                 return "=" + couleur + "wins!";
             }
 
-            return position; // Coup réussi
+            return position;
         } catch (IllegalArgumentException e) {
             return "? " + e.getMessage();
         }

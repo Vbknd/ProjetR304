@@ -38,7 +38,7 @@ public class Interpreteur {
         scanner.close();
     }
 
-    private boolean traiterCommande(String commande) {
+    public boolean traiterCommande(String commande) {
 
         if (joueurBlanc == null || joueurNoir == null) {
             if (!commande.startsWith("set_player")) {
@@ -123,7 +123,7 @@ public class Interpreteur {
 
     private boolean traiterGenMove(String commande) {
         try {
-            // Découpe et valide la commande
+
             String[] parties = commande.split(" ");
             if (parties.length != 2) {
                 System.out.println("?" + numCommande + " invalid genmove command");
@@ -136,7 +136,7 @@ public class Interpreteur {
                 return false;
             }
 
-            // Identifie le joueur et les symboles associés
+
             Joueur joueur = couleur.equals("black") ? joueurNoir : joueurBlanc;
             char symboleIA = couleur.equals("black") ? 'X' : 'O';
             char symboleAdversaire = couleur.equals("black") ? 'O' : 'X';
@@ -145,7 +145,7 @@ public class Interpreteur {
             Commande genMove = new GenMoveCommande(plateau, joueur, symboleIA, symboleAdversaire);
             String coup = genMove.executer().trim();
 
-            // Vérifie la légalité du coup
+
             int[] coordonnees = parsePosition(coup);
             if (!plateau.estCoupLegal(coordonnees[0], coordonnees[1])) {
                 System.out.println("?" + numCommande + " illegal move (case already occupied or out of bounds)");
@@ -157,7 +157,7 @@ public class Interpreteur {
             VerifierVictoire verifierVictoire = new VerifierVictoire(plateau);
             if (verifierVictoire.aGagne(coordonnees[0], coordonnees[1], symboleIA)) {
                 System.out.println("=" + numCommande + " " + symboleIA + " wins!");
-                return true; // Fin de partie
+                return true;
             }
 
             System.out.println("=" + numCommande + " " + coup);
@@ -238,7 +238,7 @@ public class Interpreteur {
             throw new IllegalArgumentException("Format de position invalide (ex: A1)");
         } catch (Exception e) {
             System.out.println("Erreur dans parsePosition : " + e.getMessage());
-            throw e; // Réémettre l'exception
+            throw e;
         }
     }
 
