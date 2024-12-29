@@ -30,7 +30,6 @@ public class Interpreteur {
         System.out.println("- Exemple : set_player black minimax 2");
 
         while (true) {
-            System.out.print(++numCommande + " ");
             String commande = scanner.nextLine().trim();
             if (traiterCommande(commande)) break;
         }
@@ -39,6 +38,16 @@ public class Interpreteur {
     }
 
     public boolean traiterCommande(String commande) {
+        String premierMot = commande.split("\\s+")[0];
+        try {
+            numCommande = Integer.parseInt(premierMot);
+        } catch (NumberFormatException e) {
+            System.out.println("?" + " une commande doit commencer avec un identifier ex '3 set_player white human'.");
+            return false;
+        }
+        // suppression du premier "mot" de la commande (pour enlever l'id)
+        commande = commande.replaceFirst("^\\S+\\s*", "");
+        commande = commande.trim();
 
         if (joueurBlanc == null || joueurNoir == null) {
             if (!commande.startsWith("set_player")) {
@@ -47,10 +56,7 @@ public class Interpreteur {
             }
         }
 
-
-        commande = commande.trim();
         try {
-
             if (commande.isEmpty()) {
                 System.out.println("?" + numCommande + " invalid command");
                 return false;
@@ -135,7 +141,6 @@ public class Interpreteur {
                 System.out.println("?" + numCommande + " invalid color");
                 return false;
             }
-
 
             Joueur joueur = couleur.equals("black") ? joueurNoir : joueurBlanc;
             char symboleIA = couleur.equals("black") ? 'X' : 'O';
@@ -241,8 +246,4 @@ public class Interpreteur {
             throw e;
         }
     }
-
-
-
-
 }
