@@ -1,4 +1,4 @@
-import terminalinteractions.Interpreteur;
+import terminal.Interpreteur;
 
 public class Main {
     public static void main(String[] args) {
