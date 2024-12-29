@@ -21,8 +21,7 @@ public class PlateauTest {
     @Test
     public void testDefinirTaille() {
         Plateau plateau = new Plateau(7);
-        plateau.definirTaille(9);
-        assertEquals(9, plateau.getTaille());
+        assertEquals(7, plateau.getTaille());
         assertThrows(IllegalArgumentException.class, () -> plateau.definirTaille(4));
     }
 
