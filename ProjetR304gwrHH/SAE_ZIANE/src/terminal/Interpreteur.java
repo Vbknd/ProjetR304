@@ -25,8 +25,10 @@ public class Interpreteur {
     public void lancer() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("- Exemple : [id] set_player white human");
-        System.out.println("- Exemple : [id] set_player black minimax 2");
+        System.out.println("[id] [commande] [argument]");
+        System.out.println("- obligatoire pour commencer\n exemple: ");
+        System.out.println(" [id] set_player white human");
+        System.out.println(" [id] set_player black minimax 2");
 
         while (true) {
             String commande = scanner.nextLine().trim();
