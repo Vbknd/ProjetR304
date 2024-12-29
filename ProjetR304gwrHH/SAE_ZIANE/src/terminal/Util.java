@@ -17,8 +17,8 @@ public class Util {
         if (commande.isEmpty())
             sendError("la commande est vide");
 
-        if (!Verif.ID(commande))
-            sendError("id obligatoire, ex : '3 set_player white human'.");
+        //arret du programme si pas d'id fourni au debut
+        Verif.ID(commande);
 
         String premierMot = getMot1(commande);
         int id = Integer.parseInt(premierMot);
