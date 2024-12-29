@@ -130,49 +130,49 @@ public class ProjectTests {
     public void testDefinirTaillePlateau() {
         Interpreteur interpreteur = new Interpreteur();
 
-        assertFalse(interpreteur.traiterCommande("set_player white human"));
-        assertFalse(interpreteur.traiterCommande("set_player black human"));
-        assertFalse(interpreteur.traiterCommande("boardsize 7"));
+        assertFalse(interpreteur.traiterCommande("1 set_player white human"));
+        assertFalse(interpreteur.traiterCommande("2 set_player black human"));
+        assertFalse(interpreteur.traiterCommande("3 boardsize 7"));
     }
 
     @Test
     public void testReinitialiserPlateau() {
         Interpreteur interpreteur = new Interpreteur();
-        assertFalse(interpreteur.traiterCommande("set_player white human"));
-        assertFalse(interpreteur.traiterCommande("set_player black human"));
-        assertFalse(interpreteur.traiterCommande("boardsize 5"));
-        assertFalse(interpreteur.traiterCommande("play white A1"));
+        assertFalse(interpreteur.traiterCommande("1 set_player white human"));
+        assertFalse(interpreteur.traiterCommande("2 set_player black human"));
+        assertFalse(interpreteur.traiterCommande("3 boardsize 5"));
+        assertFalse(interpreteur.traiterCommande("4 play white A1"));
 
-        assertFalse(interpreteur.traiterCommande("clear_board"));
+        assertFalse(interpreteur.traiterCommande("5 clear_board"));
     }
 
     @Test
     public void testJouerCommande() {
         Interpreteur interpreteur = new Interpreteur();
 
-        assertFalse(interpreteur.traiterCommande("set_player white human"));
-        assertFalse(interpreteur.traiterCommande("set_player black human"));
-        assertFalse(interpreteur.traiterCommande("boardsize 3"));
-        assertFalse(interpreteur.traiterCommande("play white A1"));
+        assertFalse(interpreteur.traiterCommande("1 set_player white human"));
+        assertFalse(interpreteur.traiterCommande("2 set_player black human"));
+        assertFalse(interpreteur.traiterCommande("3 boardsize 3"));
+        assertFalse(interpreteur.traiterCommande("4 play white A1"));
 
-        assertFalse(interpreteur.traiterCommande("play black B2"));
+        assertFalse(interpreteur.traiterCommande("5 play black B2"));
     }
 
     @Test
     public void testGenMoveCommande() {
         Interpreteur interpreteur = new Interpreteur();
 
-        assertFalse(interpreteur.traiterCommande("set_player white minimax 2"));
-        assertFalse(interpreteur.traiterCommande("set_player black human"));
-        assertFalse(interpreteur.traiterCommande("boardsize 3"));
-        assertFalse(interpreteur.traiterCommande("genmove white"));
+        assertFalse(interpreteur.traiterCommande("1 set_player white minimax 2"));
+        assertFalse(interpreteur.traiterCommande("2 set_player black human"));
+        assertFalse(interpreteur.traiterCommande("3 boardsize 3"));
+        assertFalse(interpreteur.traiterCommande("4 genmove white"));
     }
 
     @Test
     public void testCommandeInvalide() {
         Interpreteur interpreteur = new Interpreteur();
 
-        assertFalse(interpreteur.traiterCommande("invalid command"));
+        assertFalse(interpreteur.traiterCommande("1 invalid command"));
     }
 
     // ========================
