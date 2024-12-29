@@ -62,7 +62,7 @@ Voici un résumé des fonctionnalités :
 
 ### **Organisation des Fichiers**
 - **`Main.java`** : Point d'entrée du programme, démarre l'interpréteur.
-- **`terminalinteractions`** :
+- **`terminal`** :
   - Gère les commandes utilisateur et l'interpréteur (classe `Interpreteur`).
 - **`plateau`** :
   - Gère les opérations du plateau comme les placements et réinitialisations (classe `Plateau`).

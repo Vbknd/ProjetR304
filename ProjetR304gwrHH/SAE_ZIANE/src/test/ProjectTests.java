@@ -1,14 +1,8 @@
 package test;
 
-import commandes.DefinirTaillePlateauCommande;
-import commandes.ReinitialiserPlateauCommande;
-import commandes.JouerCommande;
-import commandes.GenMoveCommande;
-import joueur.BotMinimax;
-import joueur.JoueurHumain;
 import org.junit.Test;
 import plateau.Plateau;
-import terminalinteractions.Interpreteur;
+import terminal.Interpreteur;
 import verification.VerifierVictoire;
 
 import static org.junit.Assert.*;
