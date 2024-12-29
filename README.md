@@ -94,3 +94,7 @@ Les tests couvrent :
 - **Interface Graphique** :
   - Ajouter une interface visuelle pour une meilleure expérience utilisateur.
 
+ 
+## **Diagramme**
+![image](https://github.com/user-attachments/assets/4cbd1f7a-7781-4e88-9619-f158da7fc5cb)
+
