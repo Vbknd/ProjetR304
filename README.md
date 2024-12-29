@@ -45,16 +45,16 @@ Voici un résumé des fonctionnalités :
 - La détection est gérée efficacement par la classe `VerifierVictoire`.
 
 ### **4. Commandes Disponibles**
-- **`set_player <color> <type>`** : Configure un joueur (à utiliser avant toute autre commande).
-  - Exemple : `set_player white human`, `set_player black minimax 3`.
-- **`boardsize <taille>`** : Définit la taille du plateau.
-  - Exemple : `boardsize 7`.
-- **`play <color> <position>`** : Joue un coup pour le joueur spécifié.
-  - Exemple : `play white A1`.
-- **`genmove <color>`** : Génère automatiquement un coup pour l'IA.
-- **`clear_board`** : Réinitialise le plateau.
-- **`showboard`** : Affiche l'état actuel du plateau.
-- **`quit`** : Termine la session de jeu.
+- **`[id] set_player <color> <type>`** : Configure un joueur (à utiliser avant toute autre commande).
+  - Exemple : ` 34 set_player white human`, ` 2 set_player black minimax 3`.
+- **` [id] boardsize <taille>`** : Définit la taille du plateau.
+  - Exemple : ` 3 boardsize 7`.
+- **` [id] play <color> <position>`** : Joue un coup pour le joueur spécifié.
+  - Exemple : ` 3 play white A1`.
+- **` [id] genmove <color>`** : Génère automatiquement un coup pour l'IA.
+- **` [id] clear_board`** : Réinitialise le plateau.
+- **` [id] showboard`** : Affiche l'état actuel du plateau.
+- **` [id] quit`** : Termine la session de jeu.
 
 ---
 
