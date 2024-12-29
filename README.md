@@ -96,5 +96,6 @@ Les tests couvrent :
 
  
 ## **Diagramme**
-![image](https://github.com/user-attachments/assets/4cbd1f7a-7781-4e88-9619-f158da7fc5cb)
+![image](https://github.com/user-attachments/assets/3b0394f2-6438-45ea-9697-fe8bb87840af)
+
 
