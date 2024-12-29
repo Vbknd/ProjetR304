@@ -42,10 +42,9 @@ public class Interpreteur {
         try {
             numCommande = Integer.parseInt(premierMot);
         } catch (NumberFormatException e) {
-            System.out.println("?" + " une commande doit commencer avec un identifier ex '3 set_player white human'.");
+            System.out.println("?" + " id obligatoire, exemple : '3 set_player white human'.");
             return false;
         }
-        // suppression du premier "mot" de la commande (pour enlever l'id)
         commande = commande.replaceFirst("^\\S+\\s*", "");
         commande = commande.trim();
 
