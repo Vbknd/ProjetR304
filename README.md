@@ -1,4 +1,14 @@
 # Projet R3.04
+## NOTE 08/20
+
+## CORRECTION
+Le repo sur Github est désordonné : on ne peut pas l'importer tel quel c'est n'importe quoi. Le répertoire src est enfoui dans un sous répertoire et vous avec push le out ! Une grosse perte de temps pour toute personne qui voudrait cloner votre projet.
+
+La syntaxe de vos tests est dépassée ! Nous faisons du Junit 5 deouis la première année ! Cela complique encore plus la tache pour tester votre projet.
+
+Dès que l'id (qui est facultatif) est oublié dans une commande le programme plante c'est vraiment n'importe quoi ! Je ne teste pas plus loin, j'ai assez perdu de temps.
+
+
 Membres du groupe :
 - Ali-Shan KASSOU MAMODE (203)
 - Imad-Eddine BAHIJ (204)
